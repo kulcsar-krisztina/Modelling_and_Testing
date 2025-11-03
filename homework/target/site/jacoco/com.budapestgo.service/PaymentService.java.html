@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PaymentService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">BudapestGO Ticket System - MBT</a> &gt; <a href="index.source.html" class="el_package">com.budapestgo.service</a> &gt; <span class="el_source">PaymentService.java</span></div><h1>PaymentService.java</h1><pre class="source lang-java linenums">package com.budapestgo.service;
+
+import com.budapestgo.model.PaymentMethod;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Random;
+import java.util.UUID;
+
+/**
+ * Service for simulating payment processing.
+ * In a real system, this would integrate with actual payment gateways.
+ */
+public class PaymentService {
+<span class="fc" id="L15">    private static final Logger logger = LoggerFactory.getLogger(PaymentService.class);</span>
+    
+    private final Random random;
+    private static final double DEFAULT_SUCCESS_RATE = 0.8; // 80% success rate
+    private final double successRate;
+
+    /**
+     * Default constructor with 80% success rate.
+     */
+    public PaymentService() {
+<span class="fc" id="L25">        this(DEFAULT_SUCCESS_RATE);</span>
+<span class="fc" id="L26">    }</span>
+
+    /**
+     * Constructor with custom success rate (useful for testing).
+     *
+     * @param successRate Payment success probability (0.0 to 1.0)
+     */
+<span class="fc" id="L33">    public PaymentService(double successRate) {</span>
+<span class="pc bpc" id="L34" title="2 of 4 branches missed.">        if (successRate &lt; 0.0 || successRate &gt; 1.0) {</span>
+<span class="nc" id="L35">            throw new IllegalArgumentException(</span>
+                &quot;Success rate must be between 0.0 and 1.0&quot;
+            );
+        }
+<span class="fc" id="L39">        this.random = new Random();</span>
+<span class="fc" id="L40">        this.successRate = successRate;</span>
+<span class="fc" id="L41">    }</span>
+
+    /**
+     * Processes a payment transaction.
+     *
+     * @param method Payment method to use
+     * @param amountHUF Amount to charge in HUF
+     * @return PaymentResult containing success status and details
+     */
+    public PaymentResult processPayment(PaymentMethod method, int amountHUF) {
+<span class="nc" id="L51">        logger.info(&quot;Processing payment: {} HUF via {}&quot;, amountHUF, method.getDisplayName());</span>
+        
+        // Validate inputs
+<span class="nc bnc" id="L54" title="All 2 branches missed.">        if (method == null) {</span>
+<span class="nc" id="L55">            logger.error(&quot;Payment method is null&quot;);</span>
+<span class="nc" id="L56">            return new PaymentResult(</span>
+                false, 
+                null, 
+                &quot;Invalid payment method&quot;,
+                PaymentErrorType.INVALID_METHOD
+            );
+        }
+        
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        if (amountHUF &lt;= 0) {</span>
+<span class="nc" id="L65">            logger.error(&quot;Invalid amount: {}&quot;, amountHUF);</span>
+<span class="nc" id="L66">            return new PaymentResult(</span>
+                false, 
+                null, 
+                &quot;Invalid amount&quot;,
+                PaymentErrorType.INVALID_AMOUNT
+            );
+        }
+
+        // Simulate payment processing delay
+        try {
+<span class="nc" id="L76">            Thread.sleep(100 + random.nextInt(200)); // 100-300ms delay</span>
+<span class="nc" id="L77">        } catch (InterruptedException e) {</span>
+<span class="nc" id="L78">            Thread.currentThread().interrupt();</span>
+<span class="nc" id="L79">            logger.error(&quot;Payment processing interrupted&quot;, e);</span>
+<span class="nc" id="L80">            return new PaymentResult(</span>
+                false, 
+                null, 
+                &quot;Payment processing interrupted&quot;,
+                PaymentErrorType.NETWORK_ERROR
+            );
+<span class="nc" id="L86">        }</span>
+
+        // Simulate payment success/failure
+<span class="nc bnc" id="L89" title="All 2 branches missed.">        boolean success = random.nextDouble() &lt; successRate;</span>
+        
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        if (success) {</span>
+<span class="nc" id="L92">            String transactionId = generateTransactionId();</span>
+<span class="nc" id="L93">            logger.info(&quot;Payment successful. Transaction ID: {}&quot;, transactionId);</span>
+<span class="nc" id="L94">            return new PaymentResult(</span>
+                true, 
+                transactionId, 
+                &quot;Payment completed successfully&quot;,
+                null
+            );
+        } else {
+<span class="nc" id="L101">            PaymentErrorType errorType = generateRandomError();</span>
+<span class="nc" id="L102">            String errorMessage = getErrorMessage(errorType);</span>
+<span class="nc" id="L103">            logger.warn(&quot;Payment failed: {}&quot;, errorMessage);</span>
+<span class="nc" id="L104">            return new PaymentResult(</span>
+                false, 
+                null, 
+                errorMessage,
+                errorType
+            );
+        }
+    }
+
+    /**
+     * Generates a unique transaction ID.
+     *
+     * @return transaction ID string
+     */
+    private String generateTransactionId() {
+<span class="nc" id="L119">        return &quot;TX-&quot; + UUID.randomUUID().toString().substring(0, 8).toUpperCase();</span>
+    }
+
+    /**
+     * Generates a random payment error type.
+     *
+     * @return random PaymentErrorType
+     */
+    private PaymentErrorType generateRandomError() {
+<span class="nc" id="L128">        PaymentErrorType[] errors = PaymentErrorType.values();</span>
+<span class="nc" id="L129">        return errors[random.nextInt(errors.length)];</span>
+    }
+
+    /**
+     * Gets error message for a specific error type.
+     *
+     * @param errorType The type of payment error
+     * @return error message string
+     */
+    private String getErrorMessage(PaymentErrorType errorType) {
+<span class="nc bnc" id="L139" title="All 6 branches missed.">        switch (errorType) {</span>
+            case INSUFFICIENT_FUNDS:
+<span class="nc" id="L141">                return &quot;Insufficient funds in account&quot;;</span>
+            case NETWORK_ERROR:
+<span class="nc" id="L143">                return &quot;Network connection error&quot;;</span>
+            case TIMEOUT:
+<span class="nc" id="L145">                return &quot;Payment request timeout&quot;;</span>
+            case INVALID_CARD:
+<span class="nc" id="L147">                return &quot;Invalid card details&quot;;</span>
+            case DECLINED:
+<span class="nc" id="L149">                return &quot;Payment declined by bank&quot;;</span>
+            default:
+<span class="nc" id="L151">                return &quot;Unknown payment error&quot;;</span>
+        }
+    }
+
+    /**
+     * Enum representing different types of payment errors.
+     */
+<span class="nc" id="L158">    public enum PaymentErrorType {</span>
+<span class="nc" id="L159">        INSUFFICIENT_FUNDS,</span>
+<span class="nc" id="L160">        NETWORK_ERROR,</span>
+<span class="nc" id="L161">        TIMEOUT,</span>
+<span class="nc" id="L162">        INVALID_CARD,</span>
+<span class="nc" id="L163">        DECLINED,</span>
+<span class="nc" id="L164">        INVALID_METHOD,</span>
+<span class="nc" id="L165">        INVALID_AMOUNT</span>
+    }
+
+    /**
+     * Class representing the result of a payment transaction.
+     */
+    public static class PaymentResult {
+        private final boolean success;
+        private final String transactionId;
+        private final String message;
+        private final PaymentErrorType errorType;
+
+        /**
+         * Constructor for PaymentResult.
+         *
+         * @param success Whether payment was successful
+         * @param transactionId Transaction ID (null if failed)
+         * @param message Result message
+         * @param errorType Type of error (null if successful)
+         */
+        public PaymentResult(boolean success, String transactionId, 
+<span class="nc" id="L186">                           String message, PaymentErrorType errorType) {</span>
+<span class="nc" id="L187">            this.success = success;</span>
+<span class="nc" id="L188">            this.transactionId = transactionId;</span>
+<span class="nc" id="L189">            this.message = message;</span>
+<span class="nc" id="L190">            this.errorType = errorType;</span>
+<span class="nc" id="L191">        }</span>
+
+        public boolean isSuccess() {
+<span class="nc" id="L194">            return success;</span>
+        }
+
+        public String getTransactionId() {
+<span class="nc" id="L198">            return transactionId;</span>
+        }
+
+        public String getMessage() {
+<span class="nc" id="L202">            return message;</span>
+        }
+
+        public PaymentErrorType getErrorType() {
+<span class="nc" id="L206">            return errorType;</span>
+        }
+
+        @Override
+        public String toString() {
+<span class="nc" id="L211">            return String.format(&quot;PaymentResult{success=%s, transactionId='%s', message='%s'}&quot;,</span>
+<span class="nc" id="L212">                success, transactionId, message);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
