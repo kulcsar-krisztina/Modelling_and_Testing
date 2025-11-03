@@ -1,8 +1,0 @@
-com\budapestgo\model\TicketType.class
-com\budapestgo\service\PaymentService$PaymentResult.class
-com\budapestgo\service\PaymentService.class
-com\budapestgo\service\PaymentService$PaymentErrorType.class
-com\budapestgo\model\PaymentMethod.class
-com\budapestgo\model\Ticket.class
-com\budapestgo\system\BudapestGoSystem.class
-com\budapestgo\model\TicketState.class
