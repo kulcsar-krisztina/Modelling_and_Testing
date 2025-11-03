@@ -1,0 +1,31 @@
+{
+  "name": "TicketPurchaseModel",
+  "generator": "random(edge_coverage(100))",
+  "startElementId": "v_IDLE",
+  "vertices": [
+    {"id": "v_IDLE", "name": "v_IDLE"},
+    {"id": "v_TICKET_SELECTED", "name": "v_TICKET_SELECTED"},
+    {"id": "v_PAYMENT_METHOD_SELECTED", "name": "v_PAYMENT_METHOD_SELECTED"},
+    {"id": "v_PAYMENT_PROCESSING", "name": "v_PAYMENT_PROCESSING"},
+    {"id": "v_PAYMENT_SUCCESS", "name": "v_PAYMENT_SUCCESS"},
+    {"id": "v_PAYMENT_FAILED", "name": "v_PAYMENT_FAILED"},
+    {"id": "v_QR_GENERATED", "name": "v_QR_GENERATED"},
+    {"id": "v_TICKET_ACTIVE", "name": "v_TICKET_ACTIVE"},
+    {"id": "v_TICKET_EXPIRED", "name": "v_TICKET_EXPIRED"}
+  ],
+  "edges": [
+    {"id": "e_selectTicket", "name": "e_selectTicket", "sourceVertexId": "v_IDLE", "targetVertexId": "v_TICKET_SELECTED"},
+    {"id": "e_choosePayment", "name": "e_choosePayment", "sourceVertexId": "v_TICKET_SELECTED", "targetVertexId": "v_PAYMENT_METHOD_SELECTED"},
+    {"id": "e_initiatePayment", "name": "e_initiatePayment", "sourceVertexId": "v_PAYMENT_METHOD_SELECTED", "targetVertexId": "v_PAYMENT_PROCESSING"},
+    {"id": "e_paymentSucceeds", "name": "e_paymentSucceeds", "sourceVertexId": "v_PAYMENT_PROCESSING", "targetVertexId": "v_PAYMENT_SUCCESS"},
+    {"id": "e_paymentFails", "name": "e_paymentFails", "sourceVertexId": "v_PAYMENT_PROCESSING", "targetVertexId": "v_PAYMENT_FAILED"},
+    {"id": "e_generateQR", "name": "e_generateQR", "sourceVertexId": "v_PAYMENT_SUCCESS", "targetVertexId": "v_QR_GENERATED"},
+    {"id": "e_validateTicket", "name": "e_validateTicket", "sourceVertexId": "v_QR_GENERATED", "targetVertexId": "v_TICKET_ACTIVE"},
+    {"id": "e_ticketExpires", "name": "e_ticketExpires", "sourceVertexId": "v_TICKET_ACTIVE", "targetVertexId": "v_TICKET_EXPIRED"},
+    {"id": "e_retryPayment", "name": "e_retryPayment", "sourceVertexId": "v_PAYMENT_FAILED", "targetVertexId": "v_PAYMENT_METHOD_SELECTED"},
+    {"id": "e_cancelPurchase_1", "name": "e_cancelPurchase", "sourceVertexId": "v_TICKET_SELECTED", "targetVertexId": "v_IDLE"},
+    {"id": "e_cancelPurchase_2", "name": "e_cancelPurchase", "sourceVertexId": "v_PAYMENT_METHOD_SELECTED", "targetVertexId": "v_IDLE"},
+    {"id": "e_cancelPurchase_3", "name": "e_cancelPurchase", "sourceVertexId": "v_PAYMENT_FAILED", "targetVertexId": "v_IDLE"},
+    {"id": "e_reset", "name": "e_reset", "sourceVertexId": "v_TICKET_EXPIRED", "targetVertexId": "v_IDLE"}
+  ]
+}

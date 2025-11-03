@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TicketType.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">BudapestGO Ticket System - MBT</a> &gt; <a href="index.source.html" class="el_package">com.budapestgo.model</a> &gt; <span class="el_source">TicketType.java</span></div><h1>TicketType.java</h1><pre class="source lang-java linenums">package com.budapestgo.model;
+
+/**
+ * Enum representing different ticket types available in BudapestGO system.
+ * Each ticket type has a specific validity period and price.
+ */
+<span class="nc" id="L7">public enum TicketType {</span>
+    /**
+     * Single ticket - valid for 80 minutes, costs 350 HUF
+     */
+<span class="nc" id="L11">    SINGLE(80, 350, &quot;Single Ticket&quot;),</span>
+    
+    /**
+     * Day pass - valid for 24 hours (1440 minutes), costs 1650 HUF
+     */
+<span class="nc" id="L16">    DAY_PASS(1440, 1650, &quot;Day Pass&quot;),</span>
+    
+    /**
+     * Weekly pass - valid for 7 days (10080 minutes), costs 4950 HUF
+     */
+<span class="nc" id="L21">    WEEKLY(10080, 4950, &quot;Weekly Pass&quot;),</span>
+    
+    /**
+     * Monthly pass - valid for 30 days (43200 minutes), costs 9500 HUF
+     */
+<span class="nc" id="L26">    MONTHLY(43200, 9500, &quot;Monthly Pass&quot;);</span>
+
+    private final int validityMinutes;
+    private final int priceHUF;
+    private final String displayName;
+
+    /**
+     * Constructor for TicketType enum.
+     *
+     * @param validityMinutes Duration of ticket validity in minutes
+     * @param priceHUF Price of the ticket in Hungarian Forints
+     * @param displayName Human-readable name of the ticket type
+     */
+<span class="nc" id="L39">    TicketType(int validityMinutes, int priceHUF, String displayName) {</span>
+<span class="nc" id="L40">        this.validityMinutes = validityMinutes;</span>
+<span class="nc" id="L41">        this.priceHUF = priceHUF;</span>
+<span class="nc" id="L42">        this.displayName = displayName;</span>
+<span class="nc" id="L43">    }</span>
+
+    /**
+     * Get the validity period in minutes.
+     *
+     * @return validity duration in minutes
+     */
+    public int getValidityMinutes() {
+<span class="nc" id="L51">        return validityMinutes;</span>
+    }
+
+    /**
+     * Get the price in HUF.
+     *
+     * @return price in Hungarian Forints
+     */
+    public int getPriceHUF() {
+<span class="nc" id="L60">        return priceHUF;</span>
+    }
+
+    /**
+     * Get the display name.
+     *
+     * @return human-readable ticket type name
+     */
+    public String getDisplayName() {
+<span class="nc" id="L69">        return displayName;</span>
+    }
+
+    /**
+     * Get the validity period in milliseconds (for timestamp calculations).
+     *
+     * @return validity duration in milliseconds
+     */
+    public long getValidityMillis() {
+<span class="nc" id="L78">        return validityMinutes * 60L * 1000L;</span>
+    }
+
+    /**
+     * Get a random ticket type (used in testing).
+     *
+     * @return randomly selected TicketType
+     */
+    public static TicketType random() {
+<span class="nc" id="L87">        TicketType[] values = values();</span>
+<span class="nc" id="L88">        return values[(int) (Math.random() * values.length)];</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L93">        return String.format(&quot;%s (%d min, %d HUF)&quot;, displayName, validityMinutes, priceHUF);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

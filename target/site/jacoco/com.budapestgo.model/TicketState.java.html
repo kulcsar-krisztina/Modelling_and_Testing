@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TicketState.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">BudapestGO Ticket System - MBT</a> &gt; <a href="index.source.html" class="el_package">com.budapestgo.model</a> &gt; <span class="el_source">TicketState.java</span></div><h1>TicketState.java</h1><pre class="source lang-java linenums">package com.budapestgo.model;
+
+/**
+ * Enum representing the FSM states of the ticket purchase system.
+ * These states correspond to the GraphWalker model vertices.
+ */
+<span class="fc" id="L7">public enum TicketState {</span>
+    /**
+     * Initial state - no ticket selected
+     */
+<span class="fc" id="L11">    IDLE(&quot;Idle&quot;, &quot;No active purchase&quot;),</span>
+    
+    /**
+     * Ticket type has been selected
+     */
+<span class="fc" id="L16">    TICKET_SELECTED(&quot;Ticket Selected&quot;, &quot;User selected a ticket type&quot;),</span>
+    
+    /**
+     * Payment method has been selected
+     */
+<span class="fc" id="L21">    PAYMENT_METHOD_SELECTED(&quot;Payment Method Selected&quot;, &quot;User selected payment method&quot;),</span>
+    
+    /**
+     * Payment is being processed
+     */
+<span class="fc" id="L26">    PAYMENT_PROCESSING(&quot;Payment Processing&quot;, &quot;Payment transaction in progress&quot;),</span>
+    
+    /**
+     * Payment completed successfully
+     */
+<span class="fc" id="L31">    PAYMENT_SUCCESS(&quot;Payment Success&quot;, &quot;Payment completed successfully&quot;),</span>
+    
+    /**
+     * Payment failed
+     */
+<span class="fc" id="L36">    PAYMENT_FAILED(&quot;Payment Failed&quot;, &quot;Payment transaction failed&quot;),</span>
+    
+    /**
+     * QR code has been generated
+     */
+<span class="fc" id="L41">    QR_GENERATED(&quot;QR Generated&quot;, &quot;QR code created for ticket&quot;),</span>
+    
+    /**
+     * Ticket is active and valid
+     */
+<span class="fc" id="L46">    TICKET_ACTIVE(&quot;Ticket Active&quot;, &quot;Ticket validated and active&quot;),</span>
+    
+    /**
+     * Ticket has expired
+     */
+<span class="fc" id="L51">    TICKET_EXPIRED(&quot;Ticket Expired&quot;, &quot;Ticket validity period ended&quot;),</span>
+    
+    /**
+     * System error state
+     */
+<span class="fc" id="L56">    ERROR(&quot;Error&quot;, &quot;System error occurred&quot;);</span>
+
+    private final String displayName;
+    private final String description;
+
+    /**
+     * Constructor for TicketState enum.
+     *
+     * @param displayName Human-readable state name
+     * @param description Description of the state
+     */
+<span class="fc" id="L67">    TicketState(String displayName, String description) {</span>
+<span class="fc" id="L68">        this.displayName = displayName;</span>
+<span class="fc" id="L69">        this.description = description;</span>
+<span class="fc" id="L70">    }</span>
+
+    /**
+     * Get the display name.
+     *
+     * @return human-readable state name
+     */
+    public String getDisplayName() {
+<span class="nc" id="L78">        return displayName;</span>
+    }
+
+    /**
+     * Get the description.
+     *
+     * @return state description
+     */
+    public String getDescription() {
+<span class="nc" id="L87">        return description;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L92">        return displayName;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
